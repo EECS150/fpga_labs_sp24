@@ -333,7 +333,8 @@ Skim through the following documents and submit answers for the questions below 
 </b></p>
 
 - Page 2 of the [Zynq-7000 Product Selection Guide](https://www.xilinx.com/support/documentation/selection-guides/zynq-7000-product-selection-guide.pdf)
-- Chapter 21 of the [Technical Reference Manual](https://www.xilinx.com/support/documentation/user_guides/ug585-Zynq-7000-TRM.pdf)
+- Chapter 21 of the [Technical Reference Manual](https://docs.xilinx.com/viewer/book-attachment/mxcNFn1EFZjLI1eShoEn5w/pnoMLQXFIWQ6Jhoj0BUsTQ)
+  - [Non-PDF Version](https://docs.xilinx.com/r/en-US/ug585-zynq-7000-SoC-TRM)
 - Chapter 2 of the [Xilinx 7-series Configurable Logic Block User Guide](http://www.xilinx.com/support/documentation/user_guides/ug474_7Series_CLB.pdf).
 
 
