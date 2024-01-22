@@ -414,7 +414,7 @@ You will need to clone this repository into your instructional account.
 
 Please click the following link and accept the assignment.
 
-[Lab Repository](https://classroom.github.com/a/otrKDthv)
+[Lab Repository](https://classroom.github.com/a/MdHr-um3)
 
 GitHub Classroom will automatically generate a new repository with all of the lab files. Over the course of the class, you may make changes to this repository and commit them to save your work. At the end of the semester, you should be able to fork this repository to keep all of your work. You may also clone from multiple machines and make changes to your code without having to VPN into the lab machine. 
 
