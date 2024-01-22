@@ -382,6 +382,15 @@ git clone git@github.com:EECS151-sp24/fpga_labs_sp24-(your GitHub user ID).git
 ```
 
 Now, `cd` into the cloned directory. 
+Add the staff skeleton as a remote in order to pull any changes to the lab and starter code for future labs.
+
+```shell
+git remote add skeleton https://github.com/EECS150/fpga_labs_sp24.git
+```
+You should now see both your github classroom and the staff skeleton if you run `git remote -v`. 
+You can run `git pull skeleton main` to pull any updates to the skeleton. 
+See [Merge Conflicts](#merge-conflicts) if you run into any conflicts pulling staff code.
+
 
 ### Verilog
 Throughout the semester, you will build increasingly complex designs using Verilog, a widely used hardware description language (HDL).
