@@ -33,6 +33,7 @@ This lab will introduce you to the EECS 151 compute infrastructure, our developm
     - [Linux Basics](#linux-basics)
       - [Path Resolution](#path-resolution)
       - [Disk Usage](#disk-usage)
+      - [Text Editors](#text-editors)
     - [Git Basics](#git-basics)
       - [Merge Conflicts](#merge-conflicts)
     - [Question 1: Setup](#question-1-setup)
@@ -230,6 +231,47 @@ quota -s
 
 It is important to ensure you have enough space for your work, by either keeping your directories clean or completing work in the `/home/tmp` directory, and then copying any important results to your home directory. 
 Your personal workspace, `/home/tmp/<your-eecs-username>` can be created by logging into the [EECS Instructional WebAccount](http://inst.eecs.berkeley.edu/webacct) with your CalNet ID. Click on `More...`, then select `Make /home/tmp Directory`
+
+#### Text Editors
+
+As an editor built-in to the instructional machine, vim is highly efficient and requires no additional installation to use, so we will take a closer look to it. If you have never used Vim, please follow the tutorial [here](http://www.openvim.com/tutorial.html).
+If you would prefer to learn Emacs, you can read [this webpage](http://www.gnu.org/software/emacs/tour/) and run the Emacs built-in tutorial with Ctrl-h followed by t. Feel free to search for other resources online to learn more.
+
+While Vim is a powerful editor and ubiquitous on Linux environments, there are other alternatives that might be more suitable for different use cases. A modern graphical text editor is Visual Studio Code, which supports editing text files through an SSH session. To set up Visual Studio Code for remote development, please follow the tutorial [here](https://code.visualstudio.com/docs/remote/ssh-tutorial).
+
+**EECS 151 Vim Config**
+
+The commands `vi`, `vim`, and `nvim` are linked to a customized version of [NeoVim](https://neovim.io) for this class. It includes language intelligence (syntax errors, possible linting mistakes) via the [Verible](https://github.com/chipsalliance/verible) language server, useful keyboard shortcuts, and a cool dark theme. When you first launch vim you'll probably see a plugin manager screen pop up like this, which you can press `q` to close after it's done installing plugins. You'll know its done when the theme gets applied.
+
+<p align="center">
+<img src="./figs/vim_package.png" width="700" />
+</p>
+
+Some normal-mode shortcuts available in the default config include... (`<Leader>` is a backslash, to execute the shortcut first press backslash and then the other keys in order).
+
+- `<Leader> s` - toggle the sidebar
+- `<Leader> p p` - search file names in current directory
+- `<Leader> p g` - search file contents for all files in current directory
+- `<Leader> b d` - go to definition
+- `<Leader> b e` - go to declaration
+- `<Leader> b h` - show tooltip for current word
+- `<Leader> t <number><Enter>` - set tab to automatically become `<number>` spaces
+- to see the rest, `cat ~/.config/nvim/lua/keybinds.lua`
+
+Warning: If you want to customize the config, feel free to customize it for yourself. Note that once you choose to customize the config you won't get updates from course staff anymore, so do this at your own risk!
+
+```bash
+# See the warning above before running this!
+rm -i ~/.config/nvim
+cp -r /home/ff/eecs151/tools-151/neovim/config ~/.config/nvim
+# Now you can edit the config files in ~/.config/nvim, for example to set a custom theme.
+```
+
+**EECS 151 VSCode Config**
+
+When you open the lab directory in VSCode for the first time you may be notified of workspace-recommended plugins. We recommend that you accept the installation when prompted, as they can help you spot bugs!
+
+
 
 ### Git Basics
 In this class, we will be using Git, one of the most popular version control systems.
