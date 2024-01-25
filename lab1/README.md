@@ -14,8 +14,8 @@ College of Engineering, University of California, Berkeley
 
 This lab will introduce you to the EECS 151 compute infrastructure, our development board, and some basic Verilog.
 
-<details> 
-<summary> Table of Contents </summary>
+<details open> 
+<summary> Table of Contents (click to close) </summary>
 
 - [FPGA Lab 1: Getting Set Up - Accounts, FPGA Board, Vivado, Basic Verilog](#fpga-lab-1-getting-set-up---accounts-fpga-board-vivado-basic-verilog)
   - [Setting Up Accounts](#setting-up-accounts)
@@ -24,18 +24,20 @@ This lab will introduce you to the EECS 151 compute infrastructure, our developm
       - [On a workstation](#on-a-workstation)
       - [From your laptop](#from-your-laptop)
       - [From off-campus network](#from-off-campus-network)
-    - [SSH Keys](#ssh-keys)
+    - [Github SSH Keys](#github-ssh-keys)
     - [Some Notes for Remote Login](#some-notes-for-remote-login)
       - [SSH Session Management](#ssh-session-management)
-      - [Use SSH keys to login without a password](#use-ssh-keys-to-login-without-a-password)
+      - [Login to Remote Machines Using SSH keys](#login-to-remote-machines-using-ssh-keys)
       - [Use X2go for a remote desktop](#use-x2go-for-a-remote-desktop)
-  - [Getting Familiar with our Development Environment](#getting-familiar-with-our-development-environment)
+  - [Development Environment](#development-environment)
     - [Linux Basics](#linux-basics)
       - [Path Resolution](#path-resolution)
       - [Disk Usage](#disk-usage)
       - [Text Editors](#text-editors)
     - [Git Basics](#git-basics)
       - [Merge Conflicts](#merge-conflicts)
+    - [Get CAD Tools on Your `$PATH`](#get-cad-tools-on-your-path)
+    - [Clone Your GitHub Repository](#clone-your-github-repository)
     - [Question 1: Setup](#question-1-setup)
     - [Question 2: Common terminal tasks](#question-2-common-terminal-tasks)
   - [Our Development Board - Xilinx PYNQ-Z1](#our-development-board---xilinx-pynq-z1)
@@ -43,8 +45,6 @@ This lab will introduce you to the EECS 151 compute infrastructure, our developm
     - [The FPGA - xc7z020clg400-1](#the-fpga---xc7z020clg400-1)
     - [Question 3: Understanding your FPGA](#question-3-understanding-your-fpga)
   - [FPGA Build Flow](#fpga-build-flow)
-    - [Get CAD Tools on Your `$PATH`](#get-cad-tools-on-your-path)
-    - [Clone Your GitHub Repository](#clone-your-github-repository)
     - [Verilog](#verilog)
     - [Constraints](#constraints)
     - [Synthesis](#synthesis)
@@ -68,6 +68,12 @@ All students in the FPGA lab are required to get a EECS 151 class account to log
 To get a computer account, go to [this webapp](http://inst.eecs.berkeley.edu/webacct).
 Login using your CalNet ID, click on 'Get a new account' in the eecs151 row.
 It will create your account immediately. You can return there for forgotten login names or passwords.
+
+If you want to change your password, connect to `update.cs.berkeley.edu` with the account and follow the instructions.
+
+```shell
+ssh eecs151-xxx@update.cs.berkeley.edu
+```
 
 Please let us know if you are unable to get an account.
 
@@ -100,7 +106,7 @@ Please visit [this page](https://security.berkeley.edu/services/bsecure/bsecure-
 If you are still unable to ssh, try setting the VPN Gateway to "Library Access and Full Tunnel".
 
 
-### SSH Keys
+### Github SSH Keys
 We will use SSH keys to authenticate with Github.
 Run these commands when logged in on your `eecs151-xxx` account.
 
@@ -141,7 +147,7 @@ We recommend that you utilize SSH session management tools and that all terminal
 
 Here is a good tutorial for [tmux](https://hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/)
 
-#### Use SSH keys to login without a password
+#### Login to Remote Machines Using SSH keys
 Use the same instructions from above to generate a public/private key pair on your laptop (if you don't already have one).
 Run this from your laptop to copy your public key to the lab machine.
 ```shell
@@ -153,7 +159,10 @@ Now you should be able to ssh to the lab machine without providing a password.
 ssh eecs151-xxx@c111-2.eecs.berkeley.edu
 ```
 
-You can also add the following snippet to your ssh config (located at `~/.ssh/config`). You should then be able to ssh into a EDA server or Cory 111 Desktop by typing `ssh eda-[1-4]` or `ssh c111-[1-17]` (no other flags required).
+<details>
+<summary> Autocomplete Using SSH Config </summary>
+
+You can also add the following snippet to your ssh config (located at `~/.ssh/config`). **Anytime you want to ssh (or in the server field of x2go) you should use `ssh eda-[1-4]` or `ssh c111-[1-17]` (no other flags required).**
 
 ```
 Host eda-*
@@ -165,15 +174,18 @@ Host c111-*
   User eecs151-XXX
   ForwardAgent yes
 ```
+</details>
 
 #### Use X2go for a remote desktop
 To run software on the lab machine that requires a graphical user interface (e.g. firefox, vivado GUI), you should use `x2go`.
 [Install it from here](https://wiki.x2go.org/doku.php/download:start) (or install the `x2goclient` package if you're using Linux).
 
-Open `x2go`, create new session with the following settings (use your `eecs151-xxx` class account in the "Login" field). You might also need to specify the location of your private key for access without a password. For “Session type”, select “GNOME”. Here’s an example from macOS:
+*Note: Some Mac users are unable to install x2go from the above link, use [this link](https://wiki.x2go.org/doku.php/doc:installation:x2goclient#os_x) to download Xquartz and the x2go client. (Use the `main > 4.1.2.3 (or highest version) > 	x2goclient-4.1.2.3.20230629.OSX_10_13.dmg`*
+
+Open `x2go`, create new session with the following settings (use your `eecs151-xxx` class account in the "Login" field). You might also need to specify the location of your private key for access without a password. For “Session type”, select “GNOME”. Here’s an example:
 
 <p align="center">
-<img src="./figs/x2gomacos.png" width="500" />
+<img src="./figs/x2go.png" width="500" />
 </p>
 
 Click the session on the right bar to start it, and you should see a Gnome desktop environment running on Red Hat Enterprise Linux 8.
@@ -181,7 +193,7 @@ This desktop is running on the lab machine of your choice and is being forwarded
 
 For best compatibility, please use X2go rather than NoMachine to remotely login.
 
-## Getting Familiar with our Development Environment
+## Development Environment
 
 ### Linux Basics
 We will be using a Linux development environment.
@@ -234,10 +246,14 @@ Your personal workspace, `/home/tmp/<your-eecs-username>` can be created by logg
 
 #### Text Editors
 
-As an editor built-in to the instructional machine, vim is highly efficient and requires no additional installation to use, so we will take a closer look to it. If you have never used Vim, please follow the tutorial [here](http://www.openvim.com/tutorial.html).
-If you would prefer to learn Emacs, you can read [this webpage](http://www.gnu.org/software/emacs/tour/) and run the Emacs built-in tutorial with Ctrl-h followed by t. Feel free to search for other resources online to learn more.
+If using one of the following text editors (highly recommended to use some type of text editor), click below.
 
-While Vim is a powerful editor and ubiquitous on Linux environments, there are other alternatives that might be more suitable for different use cases. A modern graphical text editor is Visual Studio Code, which supports editing text files through an SSH session. To set up Visual Studio Code for remote development, please follow the tutorial [here](https://code.visualstudio.com/docs/remote/ssh-tutorial).
+*Note: If you don't want `vim` to be tied to neovim (ie remove configuration) add `unalias vim` at the end of your `.bashrc`.*
+
+<details>
+<summary> (N)Vim </summary>
+
+As an editor built-in to the instructional machine, vim is highly efficient and requires no additional installation to use, so we will take a closer look to it. If you have never used Vim, please follow the tutorial [here](http://www.openvim.com/tutorial.html).
 
 **EECS 151 Vim Config**
 
@@ -267,10 +283,21 @@ cp -r /home/ff/eecs151/tools-151/neovim/config ~/.config/nvim
 # Now you can edit the config files in ~/.config/nvim, for example to set a custom theme.
 ```
 
-**EECS 151 VSCode Config**
+</details>
 
-When you open the lab directory in VSCode for the first time you may be notified of workspace-recommended plugins. We recommend that you accept the installation when prompted, as they can help you spot bugs!
+<details>
+<summary> Emacs </summary>
 
+If you would prefer to learn Emacs, you can read [this webpage](http://www.gnu.org/software/emacs/tour/) and run the Emacs built-in tutorial with Ctrl-h followed by t. Feel free to search for other resources online to learn more.
+</details>
+
+
+<details>
+<summary> VS Code </summary>
+
+A modern graphical text editor is Visual Studio Code, which supports editing text files through an SSH session. 
+To use Visual Studio Code on your personal machine for remote development, please follow the  [Remote development over SSH](https://code.visualstudio.com/docs/remote/ssh-tutorial) tutorial.
+</details>
 
 
 ### Git Basics
@@ -306,8 +333,41 @@ However, if you put in the effort to learn how to use some of the more powerful 
 It may be the case that staff needs to make an update on already released labs, and if you have already edited skeleton code you may run into a merge conflict. 
 In this case you will have to tell git which changes you want to keep, check out [this link](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line) for a quick way to deal with such merge conflicts.
 
+### Get CAD Tools on Your `$PATH`
+- Add the following line to your `~/.bashrc` file:
+```bash
+source /home/ff/eecs151/eecs151_fpga.sh
+```
+- Close your SSH sessions / log out and log back in
+- Make sure `which vivado` returns `/share/instsww/xilinx/Vivado/2021.1/bin/vivado`
+
+
+### Clone Your GitHub Repository 
+
+Please click the following link and accept the assignment.
+
+[Lab Repository](https://classroom.github.com/a/kkXK7txs)
+
+GitHub Classroom will create a new repository to contain all your lab work. Over the course of the class, **you should commit often** and **push to this repo**. At the end of the semester, you should be able to fork this repository to keep all of your work. You may also clone from multiple machines and make changes to your code without having to VPN into the lab machine. 
+
+Please clone the repository generated by GitHub Classroom to your instructional account. You may ask your TA if you need help with this. It is usually easiest to place the repository in the home directoy `~/`. 
+
+```bash
+git clone git@github.com:EECS151-sp24/fpga-(GitHub username).git
+```
+
+Now, `cd` into the cloned directory. 
+Add the staff skeleton as a remote in order to pull starter code each lab and any potential changes.
+
+```shell
+git remote add staff https://github.com/EECS150/fpga_labs_sp24.git
+```
+You should now see both your github classroom and the staff skeleton if you run `git remote -v`. 
+You can run `git pull staff main` to pull updates to the skeleton. 
+See [Merge Conflicts](#merge-conflicts) if you run into any conflicts pulling staff code.
+
 <p align="center"><b>
-Once you've completed the above guide, answer the following questions on the corresponding gradescope assignment.
+Once you've completed the above, answer the following questions on the corresponding gradescope assignment.
 </b></p>
 
 ### Question 1: Setup
@@ -398,42 +458,6 @@ The final stage generates a bitstream ready to download to your FPGA.
 
 The CAD tool provided by Xilinx is Vivado Design Suite.
 Vivado has an integrated scripting capability (using the Tcl language -- pronounced "tickle") which allows users to write Tcl commands to interact with Vivado using a command-line interface.
-
-### Get CAD Tools on Your `$PATH`
-- Add the following line to your `~/.bashrc` file:
-```bash
-source /home/ff/eecs151/eecs151_fpga.sh
-```
-- Close your SSH sessions / log out and log back in
-- Make sure `which vivado` returns `/share/instsww/xilinx/Vivado/2021.1/bin/vivado`
-
-
-### Clone Your GitHub Repository
-
-You will need to clone this repository into your instructional account. 
-
-Please click the following link and accept the assignment.
-
-[Lab Repository](https://classroom.github.com/a/MdHr-um3)
-
-GitHub Classroom will automatically generate a new repository with all of the lab files. Over the course of the class, you may make changes to this repository and commit them to save your work. At the end of the semester, you should be able to fork this repository to keep all of your work. You may also clone from multiple machines and make changes to your code without having to VPN into the lab machine. 
-
-Please clone the repository generated by GitHub Classroom to your instructional account. You may ask your TA if you need help with this. It is usually easiest to place the repository in the home directoy `~/`. 
-
-```bash
-git clone git@github.com:EECS151-sp24/fpga_labs_sp24-(your GitHub user ID).git
-```
-
-Now, `cd` into the cloned directory. 
-Add the staff skeleton as a remote in order to pull any changes to the lab and starter code for future labs.
-
-```shell
-git remote add skeleton https://github.com/EECS150/fpga_labs_sp24.git
-```
-You should now see both your github classroom and the staff skeleton if you run `git remote -v`. 
-You can run `git pull skeleton main` to pull any updates to the skeleton. 
-See [Merge Conflicts](#merge-conflicts) if you run into any conflicts pulling staff code.
-
 
 ### Verilog
 Throughout the semester, you will build increasingly complex designs using Verilog, a widely used hardware description language (HDL).
@@ -568,7 +592,7 @@ You will often find the `.log` (`build/synth/synth.log`, `build/impl/impl.log`) 
 ## Exercise
 Modify the sample code to implement the following functionality: the second LED light (`LEDS[1]`) is on only when all four buttons (`BUTTONS[3:0]`) are pressed.
 
-*Note*: You can declare wires in Verilog to hold intermediate boolean signals:
+*Note*: You can declare wires in Verilog to hold intermediate boolean signals like the following example:
 ```verilog
 input in1, in2, in3;
 output out;
