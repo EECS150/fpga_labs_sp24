@@ -2,7 +2,10 @@
 
 For each lab, please find the instructions at **/lab#/README.md**
 
-Lab 1: Due by next lab (1/29, 1/30)
+Labs are due by your next lab section.
+
+Lab 1: 1/29, 1/30
+Lab 2: 2/4, 2/5
 
 # Resources
 
