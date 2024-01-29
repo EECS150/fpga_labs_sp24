@@ -1,4 +1,4 @@
-# EECS151/251A FPGA Labs SP23
+# EECS151/251A FPGA Labs SP24
 
 For each lab, please find the instructions at **/lab#/README.md**
 
