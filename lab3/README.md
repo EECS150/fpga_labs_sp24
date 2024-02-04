@@ -363,7 +363,7 @@ We have provided a simple testbench in `sim/sq_wave_gen_tb.v` which pulls about 
 You can run a script to convert this text file to an audio file:
 `cd lab3 && ../scripts/audio_from_sim sim/codes.txt`
 
-Play the `output.wav` audio file using `play output.wav` or by copying it to your personal machine.
+Play the `output.wav` audio file using `aplay output.wav` or by copying it to your personal machine.
 Verify this sounds like a 440 Hz square wave; [use this website](https://www.szynalski.com/tone-generator/) for reference.
 Keep your volume low - square waves are harsh.
 

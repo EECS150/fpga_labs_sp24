@@ -4,8 +4,8 @@ This script converts a raw square wave signal from a Verilog simulation into a .
 
 Usage: ./scripts/audio_from_sim lab3/sim/codes.txt
 
-This script will generate a file named output.wav that can be played using 'play'
-Playback: play output.wav
+This script will generate a file named output.wav that can be played using 'aplay'
+Playback: aplay output.wav
 """
 
 import wave
