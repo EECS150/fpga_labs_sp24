@@ -12,7 +12,7 @@ Department of Electrical Engineering and Computer Science
 College of Engineering, University of California, Berkeley
 </p>
 
-## Before You Start This Lab
+## Before You Begin
 Make sure that you have gone through and completed the steps involved in Lab 1.
 Let the TA know if you are not signed up for this class on Ed or if you do not have a class account (`eecs151-xxx`), so we can get that sorted out.
 
@@ -25,13 +25,13 @@ The queue form can be found on the EECS151 course website.
 
 **Note: We enforce a no flip-flop inference policy in this class.
 You must use the register library in `EECS151.v` whenever creating registers in Verilog.
-This policy applies to all labs and projects.**
+This policy applies to all labs and projects.** You can find the file at the root of your lab repository or at `/home/ff/eecs151/verilog_lib/EECS151.v`.
 
-<details open> 
+<details open>
 <summary> Table of Contents (click to close) </summary>
 
 - [FPGA Lab 2: Introduction to FPGA Development](#fpga-lab-2-introduction-to-fpga-development)
-  - [Before You Start This Lab](#before-you-start-this-lab)
+  - [Before You Begin](#before-you-begin)
   - [A Structural and Behavioral Adder Design](#a-structural-and-behavioral-adder-design)
     - [Build a Structural 14-bit Adder](#build-a-structural-14-bit-adder)
       - [Makefile-Based Build Flow](#makefile-based-build-flow)
@@ -52,10 +52,8 @@ This policy applies to all labs and projects.**
     - [Build a 4-bit Counter](#build-a-4-bit-counter)
   - [Simulating the Counter](#simulating-the-counter)
     - [Analyzing the Simulation](#analyzing-the-simulation)
-      - [Fixing Unknown Signals](#fixing-unknown-signals)
   - [Put the Counter on the FPGA](#put-the-counter-on-the-fpga)
   - [Lab Deliverables](#lab-deliverables)
-    - [Lab Checkoff (due: next lab)](#lab-checkoff-due-next-lab)
   - [Acknowledgement](#acknowledgement)
 
 </details>
@@ -89,7 +87,21 @@ Running `make program` will run all the steps required to regenerate a bitstream
 
 **Use this flow** to generate a bitstream and program the FPGA.
 Try running `make lint` and `make elaborate` before you run `make program`.
-*Note*: `make lint` may give you a false warning about a combinational path (`%Warning-UNOPTFLAT`) and might fail - you can safely ignore it.
+
+*Note*: The errors and warnings that `make lint` and `make synth` will show are **incredibly helpful** in finding bugs. Things like combinatorial loops, multi-driven nets (where the same wire is trying to be set by competing sources), and bitwidth inconsistencies should be fixed! However in this lab `make lint`
+may give you a false warning about a combinational loop (`%Warning-UNOPTFLAT`) and might fail - you can safely ignore it. To see why click the following dropdown.
+
+<details>
+
+<summary> Why is there a `%Warning-UNOPTFLAT`? (click to expand) </summary>
+
+Combinatorial loops (when the output of some combinatorial logic is fed back into that same logic) is a very bad design practice and should be avoided. Static timing analyzers and simulators may not be able to resolve this and in a real circuit you may get values that never stabilize!
+
+In this case however, you may have dependencies between different bits in a multi-bit signal and may not have any loops on a bit level. The linting tool checks for loops on the full, multi-bit wire and not each bit individually, which causes the warning. ([https://www.embecosm.com/appnotes/ean6/html/ch07s02s07.html](https://www.embecosm.com/appnotes/ean6/html/ch07s02s07.html))
+
+"Often UNOPTFLAT is caused by logic that isn’t truly circular as viewed by synthesis, which analyzes interconnection per bit, but is circular to the IEEE event model which analyzes per-signal." ([https://verilator.org/guide/latest/warnings.html#cmdoption-arg-UNOPTFLAT](https://verilator.org/guide/latest/warnings.html#cmdoption-arg-UNOPTFLAT))
+
+</details>
 
 **Try entering** different binary numbers into your adder with the switches and buttons and see that the correct sum is displayed on the LEDs.
 If the circuit doesn't work properly on your first try, don't worry and move on to the next section where we simulate the `structural_adder` and you can easily fix bugs.
@@ -199,7 +211,7 @@ Here are a few examples:
   - `'hFFFF_0000` = a 32-bit literal with value = 0xFFFF0000
       - *Note*: You can omit the bit width and let Verilog use the minimum number of bits necessary to construct the literal. This is not recommended for RTL, but is often OK for testbenches.
 
-Since the adder is a combinational circuit, once we set its inputs (`a` and `b`), we must advance time for the inputs to propagate to the output (`sum`) through the circuit, before we can inspect the output.
+Since the adder is a combinational circuit, once we set its inputs (`a` and `b`), we **must advance time for the inputs to propagate to the output (`sum`) through the circuit**, before we can inspect the output.
 
 We can advance simulation time using delay statements.
 A delay statement takes the form `#(units);`, where *1 unit* represents the simulation time unit defined in `timescale` declaration.
@@ -371,6 +383,8 @@ If it's 0, the counter should stay at the same value.
 
 Some initial code has been provided in `src/counter.v` to help you get started.
 
+**Note:** It is helpful to think about what the circuit will look like before writing your verilog. Draw the modules / registers / logic and the wires that connect them (either in your head or on paper) before writing the HDL. Then after creating your module running `make elaborate` will open a gui showing what your HDL code connections actually look like.
+
 ## Simulating the Counter
 See the simulation skeleton in `sim/counter_testbench.v`.
 
@@ -406,7 +420,8 @@ Once your design simulates successfully, you can change a constant in your `coun
 ### Analyzing the Simulation
 When you open the waveform, you *may* see that your counter signal is just a red line. What’s going on?
 
-#### Fixing Unknown Signals
+**Fixing Unknown Signals**
+
 Blue lines (shown as `Z`) in a waveform viewer indicate high-impedance (unconnected) signals.
 We won't be using high-impedance signals in our designs, so blue lines or `Z` indicate something in our testbench or DUT isn't wired up properly.
 
@@ -429,7 +444,8 @@ If done correctly, LEDs 0 through 3 should continually count up by 1 each second
 This process, where we use simulation to verify the functionality of a module before programming it onto the FPGA, is invaluable and will be the one we use throughout this semester.
 
 ## Lab Deliverables
-### Lab Checkoff (due: next lab)
+**Lab Checkoff (due: next lab)**
+
 To checkoff for this lab, have these things ready to show the TA:
   - Your FPGA, programmed with the adder circuit and with both RGB LEDs (LEDs 4 and 5) lit up showing correctness. Be ready to explain how your structural adder works.
   - A waveform of the testbench you wrote for your counter and its clock enable functionality.
@@ -454,3 +470,4 @@ This lab is the result of the work of many EECS151/251 GSIs over the years inclu
 - Sp22: Alisha Menon, Yikuan Chen, Seah Kim
 - Fa22: Simon Guo, Yikuan Chen
 - Sp23: Rahul Kumar, Yukio Miyasaka, Dhruv Vaish
+- Sp24: Daniel Endraws

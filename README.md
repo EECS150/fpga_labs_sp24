@@ -1,11 +1,14 @@
-# EECS151/251A FPGA Labs SP23
+# EECS151/251A FPGA Labs SP24
 
 For each lab, please find the instructions at **/lab#/README.md**
 
 Labs are due by your next lab section.
 
 Lab 1: 1/29, 1/30
-Lab 2: 2/4, 2/5
+
+Lab 2: 2/5, 2/6
+
+Lab 3: 2/12, 2/13
 
 # Resources
 

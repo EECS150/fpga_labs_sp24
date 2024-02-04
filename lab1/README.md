@@ -248,8 +248,6 @@ Your personal workspace, `/home/tmp/<your-eecs-username>` can be created by logg
 
 If using one of the following text editors (highly recommended to use some type of text editor), click below.
 
-*Note: If you don't want `vim` to be tied to neovim (ie remove configuration) add `unalias vim` at the end of your `.bashrc`.*
-
 <details>
 <summary> (N)Vim </summary>
 
@@ -257,7 +255,7 @@ As an editor built-in to the instructional machine, vim is highly efficient and 
 
 **EECS 151 Vim Config**
 
-The commands `vi`, `vim`, and `nvim` are linked to a customized version of [NeoVim](https://neovim.io) for this class. It includes language intelligence (syntax errors, possible linting mistakes) via the [Verible](https://github.com/chipsalliance/verible) language server, useful keyboard shortcuts, and a cool dark theme. When you first launch vim you'll probably see a plugin manager screen pop up like this, which you can press `q` to close after it's done installing plugins. You'll know its done when the theme gets applied.
+The command `nvim` is linked to a customized version of [NeoVim](https://neovim.io) for this class. It includes language intelligence (syntax errors, possible linting mistakes) via the [Verible](https://github.com/chipsalliance/verible) language server, useful keyboard shortcuts, and a cool dark theme. When you first launch vim you'll probably see a plugin manager screen pop up like this, which you can press `q` to close after it's done installing plugins. You'll know its done when the theme gets applied.
 
 <p align="center">
 <img src="./figs/vim_package.png" width="700" />
@@ -296,7 +294,7 @@ If you would prefer to learn Emacs, you can read [this webpage](http://www.gnu.o
 <summary> VS Code </summary>
 
 A modern graphical text editor is Visual Studio Code, which supports editing text files through an SSH session. 
-To use Visual Studio Code on your personal machine for remote development, please follow the  [Remote development over SSH](https://code.visualstudio.com/docs/remote/ssh-tutorial) tutorial.
+To use Visual Studio Code on your personal machine for remote development, please download the [SSH Remote Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) with which you can connect to the remote machines and download some type of verilog language server, such as [SystemVerilog - Language Support](https://marketplace.visualstudio.com/items?itemName=eirikpre.systemverilog), [Verilog-HDL](https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL) or similar!
 </details>
 
 
