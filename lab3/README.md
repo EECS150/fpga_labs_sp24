@@ -363,9 +363,9 @@ We have provided a simple testbench in `sim/sq_wave_gen_tb.v` which pulls about 
 You can run a script to convert this text file to an audio file:
 `cd lab3 && ../scripts/audio_from_sim sim/codes.txt`
 
-Play the `output.wav` audio file using `aplay output.wav` or by copying it to your personal machine.
-Verify this sounds like a 440 Hz square wave; [use this website](https://www.szynalski.com/tone-generator/) for reference.
-Keep your volume low - square waves are harsh.
+Play the `output.wav` audio file by connecting your headphones to the machine and using `aplay output.wav` or by opening it with VLC. Additionally you can use `scp` to copy the file to your personal machine (`scp eecs151-<xxx>@c111-<machine>.eecs.berkeley.edu:<path to src> <path to dst>`).
+Verify this sounds like a 440 Hz square wave; [use this website](https://www.szynalski.com/tone-generator/) for reference (be sure to change the wave type from a sin wave to a square wave).
+**Keep your volume low** - square waves are harsh.
 
 ### On the FPGA
 **Look** at `src/z1top.v` to see how the `dac` and `sq_wave_gen` are connected.
