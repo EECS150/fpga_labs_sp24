@@ -28,8 +28,12 @@ In this lab we will:
 
 Fetch Latest Lab Skeleton
 ```shell
-cd fpga_labs_fa23
-git pull skeleton master
+cd fpga-labs-<username>
+git pull staff main
+```
+If you face any divergent branch issues, merge the staff changes into your branch with:
+```shell
+git merge staff/main
 ```
 
 Copy Sources From Previous Lab
@@ -86,7 +90,13 @@ Use the button inputs as follows:
 Use `leds[0]` to display the frequency adjustment mode. The other `leds` can be set as you wish.
 
 Since we now have a working button parser, we will use an explicit reset signal (`rst`) to make sure our registers don't hold undefined values (`X`) during simulation, and to gain the ability to reset our circuits at runtime.
-When `rst` is high on a rising clock edge, you should reset any registers in your circuit and reset the square wave frequency to 440 Hz.
+
+When `rst` is high on a rising clock edge, you should be in:
+- 440 Hz square wave frequency
+- Linear incrementing mode
+
+by resetting all registers in your circuit to known values.
+
 
 **Manually copy your DAC** from `lab3/src/dac.v` to `lab4/src/dac.v`. **Use the new `rst` signal** to reset registers inside your DAC *instead of* using initial values. Example:
 ```verilog
@@ -94,17 +104,21 @@ When `rst` is high on a rising clock edge, you should reset any registers in you
 input clk, rst;
 wire [4:0] count, count_next;
 
-assign count_next = count + 5'd1;
+REGISTER_R #(
+  .N(5), 
+  .INIT(5'd0) // Reset value
+) counter (.q(count), .d(count_next), .rst(rst), .clk(clk));
 
-REGISTER_R #(5) counter (.q(count), .d(count_next), .rst(rst), .clk(clk));
+// ... (code here) ...
 ```
 
 Use your solution from lab 3 to **implement the new square wave generator** in `src/sq_wave_gen.v`.
-You should support a square wave frequency range from 20 Hz to 10 kHz. (hint: calculate the corresponding period...)
+You should support a square wave frequency range from 20 Hz to 10 kHz. (hint: calculate the corresponding period...). Also, on reset, you should 
 
 ### Verification
 **Extend the testbench** in `sim/sq_wave_gen_tb.v` to verify the reset and frequency adjustment functionality of your `sq_wave_gen`.
-Make sure your RTL can handle overflow (what happens when you keep pressing the same button?)
+
+Make sure your RTL can **handle overflow** (what happens when you keep pressing the same button?)
 
 The testbench has 2 simulation threads
   - The first one pulls samples from the `sq_wave_gen` at random intervals
@@ -174,17 +188,15 @@ We’ve generated a file that contains the contents of the LUT for you in `src/s
 python scripts/nco.py --sine-lut > sine.bin
 ```
 
-We can use the file to initialize a ROM inside `src/nco.v`. Use the Single-port ROM with synchronous read in the `EECS151.v` library file (`SYNC_ROM` module). You can provide a file for it to load the ROM with initial contents like the following example (note how this uses `$readmemb()` under the hood).
+We can use the file to initialize a ROM inside `src/nco.v`. Use the Single-port ROM with asynchronous read in the `EECS151.v` library file (`ASYNC_ROM` module). You can provide a file for it to load the ROM with initial contents like the following example (note how this uses `$readmemb()` under the hood).
 ```verilog
-SYNC_ROM #(
+ASYNC_ROM #(
   .DWIDTH(10), // Data width
   .AWIDTH(8),  // Address width
   .MIF_BIN("sine.bin") // Memory initialization file (binary)
 ) sine_rom (
-  .q(rom_output),
-  .addr(rom_addr),
-  .en(1'b1),
-  .clk(clk)
+  .q(/* output */),
+  .addr(/* address */)
 );
 ```
 

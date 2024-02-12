@@ -14,35 +14,31 @@ module fcw_ram(
     reg [23:0] ram [3:0];
     assign d_out = ram[addr];
 
-    REGISTER_R_CE #(.N(24), .INIT(`A4_FCW)) note_a_reg (
+    REGISTER_R #(.N(24), .INIT(`A4_FCW)) note_a_reg (
         .q(ram[0]),
-        .d(d_in),
+        .d((wr_en && addr == 2'd0) ? d_in : ram[0]),
         .rst(rst),
-        .ce(wr_en && addr == 2'd0),
         .clk(clk)
     );
 
-    REGISTER_R_CE #(.N(24), .INIT(`B4_FCW)) note_b_reg (
+    REGISTER_R #(.N(24), .INIT(`B4_FCW)) note_b_reg (
         .q(ram[1]),
-        .d(d_in),
+        .d((wr_en && addr == 2'd1) ? d_in : ram[1]),
         .rst(rst),
-        .ce(wr_en && addr == 2'd1),
         .clk(clk)
     );
 
-    REGISTER_R_CE #(.N(24), .INIT(`C5_FCW)) note_c_reg (
+    REGISTER_R #(.N(24), .INIT(`C5_FCW)) note_c_reg (
         .q(ram[2]),
-        .d(d_in),
+        .d((wr_en && addr == 2'd2) ? d_in : ram[2]),
         .rst(rst),
-        .ce(wr_en && addr == 2'd2),
         .clk(clk)
     );
 
-    REGISTER_R_CE #(.N(24), .INIT(`D5_FCW)) note_d_reg (
+    REGISTER_R #(.N(24), .INIT(`D5_FCW)) note_d_reg (
         .q(ram[3]),
-        .d(d_in),
+        .d((wr_en && addr == 2'd3) ? d_in : ram[3]),
         .rst(rst),
-        .ce(wr_en && addr == 2'd3),
         .clk(clk)
     );
 

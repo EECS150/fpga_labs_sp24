@@ -164,3 +164,13 @@ ipshared
 !*.elf
 !*.bmm
 !*.xmp
+
+### Simulation Outputs
+
+*/sim/csrc
+*/sim/*.daidir
+*/sim/*.fst
+*/sim/*.tb
+*/sim/*.tbi
+*/sim/*.vpd
+ucli.key
