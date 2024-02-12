@@ -169,6 +169,9 @@ $$LUT[i] = sin(i \frac{2\pi}{2^N})$$
 To find the index ***i*** of the LUT that stores the ***n-th sample***, we can equate the expressions inside $sin()$:
 
 $$i \frac{2 \pi}{2^N} = 2 \pi f_{sig} \frac{n}{f_{samp}}$$
+
+Which leads to the following:
+
 $$i = \underbrace{\left(\frac{f_{sig}}{f_{samp}} 2^N \right)}_{\text{phase increment}} n$$
 
 This means that to calculate sample `n+1` for a given $f_{sig}$, we should take the LUT index ***i*** that corresponds to sample `n` and increment the index by the **frequency control word (FCW)** (also called the **phase increment** in the equation above).

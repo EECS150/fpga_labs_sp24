@@ -9,9 +9,9 @@ module fcw_ram(
     input wr_en,
     input [1:0] addr,
     input [23:0] d_in,
-    output reg [23:0] d_out
+    output [23:0] d_out
 );
-    reg [23:0] ram [3:0];
+    wire [23:0] ram [3:0];
     assign d_out = ram[addr];
 
     REGISTER_R #(.N(24), .INIT(`A4_FCW)) note_a_reg (
