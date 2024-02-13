@@ -7,6 +7,7 @@ FPGA_PART               ?= xc7z020clg400-1
 RTL                     += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.v"))
 RTL                     += $(ABS_TOP)/../EECS151.v
 CONSTRAINTS             += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.xdc"))
+MIFS                    += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.bin" -o -name "*.hex"))
 TOP                     ?= z1top
 VCS                     := vcs -full64
 VCS_OPTS                := -notice -line +lint=all,noVCDE,noNS,noSVA-UA -sverilog -timescale=1ns/10ps -debug
@@ -40,6 +41,9 @@ build/target.tcl: $(RTL) $(CONSTRAINTS)
 	echo "}" >> $@
 	echo -n "set CONSTRAINTS { " >> $@
 	FLIST="$(CONSTRAINTS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
+	echo "}" >> $@
+	echo -n "set MIFS { " >> $@
+	FLIST="$(MIFS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
 	echo "}" >> $@
 
 setup: build/target.tcl

@@ -10,6 +10,11 @@ if {[string trim ${CONSTRAINTS}] ne ""} {
   read_xdc ${CONSTRAINTS}
 }
 
+# Read memory initialization files
+if {[string trim ${MIFS}] ne ""} {
+  read_mem ${MIFS}
+}
+
 synth_design -top ${TOP} -part ${FPGA_PART}
 
 write_checkpoint -force ${TOP}.dcp
