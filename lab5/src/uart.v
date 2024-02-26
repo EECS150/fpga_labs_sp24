@@ -47,6 +47,6 @@ module uart #(
         .data_out(data_out),
         .data_out_valid(data_out_valid),
         .data_out_ready(data_out_ready),
-        .serial_in(serial_in_reg)
+        .serial_in(serial_in_rx)
     );
 endmodule
