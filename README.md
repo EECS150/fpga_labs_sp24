@@ -12,6 +12,10 @@ Lab 3: Week of 2/12
 
 Lab 4: Week of 2/26 (i.e. after buffer week)
 
+Lab 5: Week of 3/4
+
+Lab 6: Week of 3/11
+
 # Resources
 
 PYNQ-Z1 Reference Manual: https://reference.digilentinc.com/reference/programmable-logic/pynq-z1/reference-manual

@@ -88,6 +88,7 @@ Here is an overview of constructs you should know:
     repeat (2) @(negedge clk);
     repeat (10) begin
         @(posedge clk);
+        $display("Another statement here");
     end
     ```
 
@@ -228,7 +229,7 @@ The debouncer circuit takes a button's glitchy digital signal and outputs a clea
   <em>Architecture of a simple debouncer circuit. <a href="http://www.labbookpages.co.uk/electronics/debounce.html">Source</a></em>
 </p>
 
-The debouncer consists of:
+The debouncer module should consist of the following (*note the input to the debouncer is the output of the synchronizer module so you don't need to include it inside of your debouncer*):
   - **Sample Pulse Generator** - Tells our saturating counter when to sample the input signal. It should output a 1, every `SAMPLE_CNT_MAX` clock cycles. By default `SAMPLE_CNT_MAX` is set to 65000.
   - **Saturating Counter** - This is a counter that counts up to and including `PULSE_CNT_MAX` (and saturates).
 

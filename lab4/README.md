@@ -100,7 +100,7 @@ by resetting all registers in your circuit to known values.
 
 **Manually copy your DAC** from `lab3/src/dac.v` to `lab4/src/dac.v`. **Use the new `rst` signal** to reset registers inside your DAC *instead of* using initial values. Example:
 ```verilog
-// Explicit reset
+// Explicit global reset
 input clk, rst;
 wire [4:0] count, count_next;
 
@@ -113,7 +113,7 @@ REGISTER_R #(
 ```
 
 Use your solution from lab 3 to **implement the new square wave generator** in `src/sq_wave_gen.v`.
-You should support a square wave frequency range from 20 Hz to 10 kHz. (hint: calculate the corresponding period...). Also, on reset, you should 
+You should support a square wave frequency range from 20 Hz to 10 kHz. (hint: calculate the corresponding period...).
 
 ### Verification
 **Extend the testbench** in `sim/sq_wave_gen_tb.v` to verify the reset and frequency adjustment functionality of your `sq_wave_gen`.
@@ -184,6 +184,8 @@ $$\Delta_{f,min} = \frac{f_{samp}}{2^N}$$
 In the equaltion above, ${2^N}$ is th total number of frequencies we could represent using N bits. In this lab we will use `N=24`. Recall that in lab 3, our DAC has a frequency of `122kHz`, which means the frequency resolution is `0.007Hz`. We can have very precise frequency control using an NCO.
 
 However, a $2^{24}$ entry LUT is huge and wouldn't fit on the FPGA. So, we will keep the phase accumulator `N` (24-bits) wide, and only use the MSB `M` bits to index the sine wave LUT. This means the LUT only contains $2^M$ entries, where `M` can be chosen based on the tolerable phase error. **We will use `M = 8` in this lab.**
+
+*To learn more about phase error and spurs that occur due to truncation refer to [this article from all about circuits](https://www.allaboutcircuits.com/technical-articles/basics-of-phase-truncation-in-direct-digital-synthesizers), [this analog devices note](https://www.analog.com/media/en/training-seminars/tutorials/MT-085.pdf), and [this MIT paper on phase truncation effects](https://dspace.mit.edu/bitstream/handle/1721.1/15115/14051849-MIT.pdf).*
 
 ### Implementation
 We’ve generated a file that contains the contents of the LUT for you in `src/sine.bin`. You can run the following command to re-generate it:
@@ -282,6 +284,14 @@ The `leds_state` output should represent the state your FSM is in using 2 bits.
 
 We have provided a skeleton in `src/fsm.v` and a simple RAM in `src/fsm_ram.v`.
 If you would like to use a different implementation, feel free to modify it.
+
+Here are some tips to create an FSM in verilog:
+- Encode your states as local parameters (i.e. `localparam PLAY = 2'b01` at the top of the module) and use the labels instead of literal values (i.e. `next_state = PLAY`).
+- If you are driving a value (such as outputs or internal signals) in `always @(*)` blocks, make sure to only drive that one value in a single block.
+  - Not doing so will lead to multi-driven net errors in synthesis; tools will be unsure which driver (always block) should actually drive the wire.
+  - `case` statements in the always blocks on the current state can be helpful.
+- Recall that any value **assigned to** in an `always @(*)` block must be declared as a `reg`.
+  - Note this value still represents combinational logic - `reg wr_en;` can only ever synthesize to a register / represent sequential logic if assigned to in an `always @(posedge clk)` block, but this infers a flip flop which is **not allowed** in this course.
 
 ### Testbench
 We have provided an FSM testbench skeleton in `sim/fsm_tb.v`.

@@ -1,50 +1,59 @@
 SHELL                   := $(shell which bash) -o pipefail
-ABS_TOP                 := $(subst /cygdrive/c/,C:/, $(shell pwd))
+ABS_TOP                 := $(shell pwd)
+# Convert to windows paths (C:/) requred by vivado
+# cygpath is included with git-bash, cygwin, msys2
+ifneq (, $(shell type -p cygpath))
+	ABS_TOP := $(shell cygpath -m $(ABS_TOP))
+endif
 SCRIPTS                 := $(ABS_TOP)/../scripts
 VIVADO                  ?= vivado
 VIVADO_OPTS             ?= -nolog -nojournal -mode batch
 FPGA_PART               ?= xc7z020clg400-1
-RTL                     += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.v"))
+RTL                     += $(shell find $(ABS_TOP)/src -type f -name "*.v")
 RTL                     += $(ABS_TOP)/../EECS151.v
-CONSTRAINTS             += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.xdc"))
-MIFS                    += $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/src -type f -name "*.bin" -o -name "*.hex"))
+CONSTRAINTS             += $(shell find $(ABS_TOP)/src -type f -name "*.xdc")
+MIFS                    += $(shell find $(ABS_TOP)/src -type f -name "*.bin" -o -name "*.hex")
 TOP                     ?= z1top
+
+SIM_RTL                 := $(shell find $(ABS_TOP)/sim -type f -name "*.v")
+SIM_TARGETS             := $(shell realpath --relative-to $(ABS_TOP) $(SIM_RTL))
 VCS                     := vcs -full64
 VCS_OPTS                := -notice -line +lint=all,noVCDE,noNS,noSVA-UA -sverilog -timescale=1ns/10ps -debug
-SIM_RTL                 := $(subst /cygdrive/c/,C:/, $(shell find $(ABS_TOP)/sim -type f -name "*.v"))
+VCS_TARGETS             := $(SIM_TARGETS:%.v=%.vpd)
 IVERILOG                := iverilog
 IVERILOG_OPTS           := -D IVERILOG=1 -g2012 -gassertions -Wall -Wno-timescale
+IVERILOG_TARGETS        := $(SIM_TARGETS:%.v=%.fst)
 VVP                     := vvp
 
 sim/%.tb: sim/%.v $(RTL)
 	cd sim && $(VCS) $(VCS_OPTS) -o $*.tb $(RTL) $*.v -top $*
 
-sim/%.vpd: sim/%.tb
+$(VCS_TARGETS): sim/%.vpd: sim/%.tb
 	cd sim && ./$*.tb +verbose=1 +vpdfile+$*.vpd
 
 sim/%.tbi: sim/%.v $(RTL)
 	cd sim && $(IVERILOG) $(IVERILOG_OPTS) -o $*.tbi $*.v $(RTL)
 
-sim/%.fst: sim/%.tbi
+$(IVERILOG_TARGETS): sim/%.fst: sim/%.tbi
 	cd sim && $(VVP) $*.tbi -fst
 
 build/target.tcl: $(RTL) $(CONSTRAINTS)
-	mkdir -p build
-	truncate -s 0 $@
-	echo "set ABS_TOP                        $(ABS_TOP)"    >> $@
-	echo "set TOP                            $(TOP)"    >> $@
-	echo "set FPGA_PART                      $(FPGA_PART)"  >> $@
-	echo "set_param general.maxThreads       4"    >> $@
-	echo "set_param general.maxBackupLogs    0"    >> $@
-	echo -n "set RTL { " >> $@
-	FLIST="$(RTL)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
-	echo "}" >> $@
-	echo -n "set CONSTRAINTS { " >> $@
-	FLIST="$(CONSTRAINTS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
-	echo "}" >> $@
-	echo -n "set MIFS { " >> $@
-	FLIST="$(MIFS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
-	echo "}" >> $@
+	@mkdir -p build
+	@truncate -s 0 $@
+	@echo "set ABS_TOP                        $(ABS_TOP)"    >> $@
+	@echo "set TOP                            $(TOP)"    >> $@
+	@echo "set FPGA_PART                      $(FPGA_PART)"  >> $@
+	@echo "set_param general.maxThreads       4"    >> $@
+	@echo "set_param general.maxBackupLogs    0"    >> $@
+	@echo -n "set RTL { " >> $@
+	@FLIST="$(RTL)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
+	@echo "}" >> $@
+	@echo -n "set CONSTRAINTS { " >> $@
+	@FLIST="$(CONSTRAINTS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
+	@echo "}" >> $@
+	@echo -n "set MIFS { " >> $@
+	@FLIST="$(MIFS)"; for f in $$FLIST; do echo -n "$$f " ; done >> $@
+	@echo "}" >> $@
 
 setup: build/target.tcl
 
@@ -76,12 +85,6 @@ vivado: build
 
 lint:
 	verilator --lint-only --top-module $(TOP) $(RTL)
-
-sim_build/compile_simlib/synopsys_sim.setup:
-	mkdir -p sim_build/compile_simlib
-	cd build/sim_build/compile_simlib && $(VIVADO) $(VIVADO_OPTS) -source $(SCRIPTS)/compile_simlib.tcl
-
-compile_simlib: sim_build/compile_simlib/synopsys_sim.setup
 
 clean:
 	rm -rf ./build $(junk) *.daidir sim/output.txt \

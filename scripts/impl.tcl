@@ -1,10 +1,8 @@
-source ../target.tcl
+source ../target.tcl -notrace
 
 open_checkpoint ${ABS_TOP}/build/synth/${TOP}.dcp
 
-if {[string trim ${CONSTRAINTS}] ne ""} {
-  read_xdc ${CONSTRAINTS}
-}
+if {[string trim ${CONSTRAINTS}] ne ""} {read_xdc ${CONSTRAINTS}}
 
 opt_design
 place_design

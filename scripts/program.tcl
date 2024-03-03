@@ -1,4 +1,4 @@
-source ../target.tcl
+source ../target.tcl -notrace
 open_hw_manager
 
 connect_hw_server -url localhost:3121 -allow_non_jtag

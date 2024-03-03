@@ -1,4 +1,4 @@
-# FPGA Lab 5: UART, FIFO, Memory Controller
+# FPGA Lab 5: UART and FIFO
 <p align="center">
 Prof. John Wawryznek 
 </p>
@@ -59,7 +59,7 @@ If your Verilog isn't working as expected, here are some things you should check
 
 <summary> Table of Contents (click to close) </summary>
 
-- [FPGA Lab 5: UART, FIFO, Memory Controller](#fpga-lab-5-uart-fifo-memory-controller)
+- [FPGA Lab 5: UART and FIFO](#fpga-lab-5-uart-and-fifo)
   - [Overview](#overview)
     - [Before You Begin](#before-you-begin)
     - [Reading](#reading)
@@ -316,15 +316,9 @@ The testbench performs the following test sequence:
 - Checks that the data read from the FIFO matches the data that was originally written to the FIFO
 - Prints out test debug info
 
-This testbench tests one particular way of interfacing with the FIFO.
+This testbench tests particular ways of interfacing with the FIFO.
 Of course, it is not comprehensive, and there are conditions and access patterns it does not test.
-As writing testbenches is a very valuable skill, we **highly recommend** adding some more tests to this testbench (or writing a new testbench) to verify your FIFO performs as expected.
-Here are a few tests to try:
-  - Several times in a row, write to, then read from the FIFO with no clock cycle delays.
-      This will test the FIFO in a way that it's likely to be used when buffering user I/O.
-  - Try writing and reading from the FIFO on the same cycle.
-      This will require you to use fork/join to run two threads in parallel.
-      Make sure that no data gets corrupted.
+As writing testbenches is a very valuable skill, we **highly recommend** reading through the testbench to understand what it does and adding some more tests to this testbench (or writing a new testbench) to verify your FIFO performs as expected.
 
 ### FIFO Verification (Optional)
 
