@@ -104,7 +104,7 @@ It should make a read (**the 1st byte**) from the RX FIFO whenever the `rx_fifo_
 Then, it should wait for the next packet (the address byte) to arrive at the FIFO, so it can read that byte (**the 2nd byte**). 
    - *Extremely Important Tip*: Refer to the FIFO timing diagram to see when the FIFO’s output data is valid! Remember we’re using a synchronous FIFO.
 
-1. Next, depending on whether a `Read` (8'd48, or key 0 on the keyboard) or a `Write` (8'd49, or key 1 on the keyboard) command has been received for the first byte, the memory controller transitions into different states.
+2. Next, depending on whether a `Read` (8'd48, or key 0 on the keyboard) or a `Write` (8'd49, or key 1 on the keyboard) command has been received for the first byte, the memory controller transitions into different states.
    - If the command was `Write`, then the FSM should wait for the data byte (**the 3rd byte**) to become available in the FIFO. Once the data byte is read, the controller should write the data byte into the correct address in memory, then return to IDLE.
    - If the command was `Read`, then the value at the corresponding address should be read from the RAM, and then sent to the TX_FIFO (setting control signals accordingly), followed by returning to the IDLE state. Again, remember the implications that a synchronous FIFO has for the timing of your control signals.
 
