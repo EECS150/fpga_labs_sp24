@@ -23,16 +23,16 @@ module mem_controller #(
   wire [MEM_WIDTH-1:0] mem_din;
   wire [MEM_WIDTH-1:0] mem_dout;
 
-  memory #(
-    .MEM_WIDTH(MEM_WIDTH),
-    .DEPTH(MEM_DEPTH)
-  ) mem(
+  SYNC_RAM_WBE #(
+    .DWIDTH(MEM_WIDTH),
+    .AWIDTH(MEM_ADDR_WIDTH)
+  ) mem (
     .clk(clk),
     .en(1'b1),
-    .we(mem_we),
+    .wbe(mem_we),
     .addr(mem_addr),
-    .din(mem_din),
-    .dout(mem_dout)
+    .d(mem_din),
+    .q(mem_dout)
   );
 
   localparam 

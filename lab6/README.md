@@ -90,7 +90,8 @@ The host side (your workstation computer) will send a two-byte packet (for read 
 The role of the memory controller is to handle memory reads and writes based on commands
 that the user sends from the host computer. Each operation is a multi-cycle process which
 consists of different states. You do not need to support simultaneous reads and writes.
-In order to handle memory reads and writes, your FSM needs to set the `mem_din` (memory input data), `mem_addr` (memory address), `mem_we` (memory write enable)
+
+This module uses a `SYNC_RAM_WBE` from the `EECS151.v` library, which is a synchronous read RAM with a write byte enable signal. In order to handle memory reads and writes, your FSM needs to set the `mem_din` (memory input data), `mem_addr` (memory address), `mem_we` (memory write enable)
 and FIFO communication signals properly.
 
 Commands are either 2 bytes long (for reads), or 3 bytes long (for writes).
